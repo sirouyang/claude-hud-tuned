@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash *)",
+      "Bash(command -v node)",
+      "Bash(where node *)"
+    ]
+  }
+}

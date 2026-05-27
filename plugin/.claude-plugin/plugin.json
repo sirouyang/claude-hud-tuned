@@ -1,0 +1,11 @@
+{
+  "name": "claude-hud-tuned",
+  "description": "Lightweight claude-hud fork with baked-in config (zh, expanded, custom colors)",
+  "version": "0.1.0",
+  "author": {
+    "name": "mango"
+  },
+  "commands": [],
+  "license": "MIT",
+  "keywords": ["hud", "statusline", "claude-code", "custom"]
+}

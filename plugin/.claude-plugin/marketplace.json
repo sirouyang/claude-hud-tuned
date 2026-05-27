@@ -1,0 +1,19 @@
+{
+  "name": "claude-hud-tuned",
+  "owner": {
+    "name": "mango"
+  },
+  "metadata": {
+    "description": "Lightweight claude-hud fork with baked-in config",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "claude-hud-tuned",
+      "source": "./",
+      "description": "Lightweight statusline HUD with baked-in Chinese/expanded/custom-color config",
+      "category": "monitoring",
+      "tags": ["hud", "statusline", "custom"]
+    }
+  ]
+}
