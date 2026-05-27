@@ -22,4 +22,20 @@ if [ -z "$PLUGIN_DIR" ] || [ ! -f "$PLUGIN_DIR/dist/index.js" ]; then
   exit 0
 fi
 
-exec /d/nodejs/node "$PLUGIN_DIR/dist/index.js"
+# Find node: try PATH first, then common locations
+NODE_BIN=$(command -v node 2>/dev/null)
+if [ -z "$NODE_BIN" ]; then
+  for candidate in /d/nodejs/node /usr/local/bin/node /usr/bin/node "$HOME/.nvm/versions/node/"*/bin/node; do
+    if [ -x "$candidate" ]; then
+      NODE_BIN="$candidate"
+      break
+    fi
+  done
+fi
+
+if [ -z "$NODE_BIN" ]; then
+  echo "ERROR: node not found. Install Node.js 18+ and ensure it is on PATH." >&2
+  exit 1
+fi
+
+exec "$NODE_BIN" "$PLUGIN_DIR/dist/index.js"

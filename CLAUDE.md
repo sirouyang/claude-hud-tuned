@@ -66,7 +66,7 @@ The `plugin/` directory contains the full upstream claude-hud source. Use it as 
 - Wrapper: `~/.claude/claude-hud-statusline.sh` — runs the patched plugin
 - Marketplace: `plugin/` directory (junction for development)
 
-## Environment (Windows)
+## Environment
 
-- Node: `/d/nodejs/node` (hardcoded in wrapper)
-- Settings statusLine: `bash /c/Users/mango/.claude/claude-hud-statusline.sh`
+- Node: auto-detected (PATH → common locations → error)
+- Settings statusLine: `bash ~/.claude/claude-hud-statusline.sh`
