@@ -29,11 +29,11 @@ export function renderIdentityLine(ctx, alignLabels = false) {
         const total = tokens.inputTokens + tokens.outputTokens + tokens.cacheCreationTokens + tokens.cacheReadTokens;
         if (total > 0) {
             const parts = [
-                `In: ${brightGreen(formatTokens(tokens.inputTokens))}`,
-                `Out: ${brightCyan(formatTokens(tokens.outputTokens))}`,
+                `In: \x1b[38;5;46m${formatTokens(tokens.inputTokens)}${RESET}`,
+                `Out: \x1b[38;5;51m${formatTokens(tokens.outputTokens)}${RESET}`,
             ];
             if (tokens.cacheCreationTokens > 0 || tokens.cacheReadTokens > 0) {
-                parts.push(`Cache: ${yellow(formatTokens(tokens.cacheCreationTokens + tokens.cacheReadTokens))}`);
+                parts.push(`Cache: \x1b[38;5;220m${formatTokens(tokens.cacheCreationTokens + tokens.cacheReadTokens)}${RESET}`);
             }
             let tokenStr = `${magenta("Tokens")} ${brightCyan(formatTokens(total))} (${parts.join(", ")})`;
             if (display?.showCost) {

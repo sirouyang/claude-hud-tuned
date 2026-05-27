@@ -4,7 +4,9 @@
       "Bash(bash *)",
       "Bash(command -v node)",
       "Bash(where node *)",
-      "mcp__codegraph__codegraph_context"
+      "mcp__codegraph__codegraph_context",
+      "Bash(npm run *)",
+      "Bash(npm install *)"
     ]
   }
 }

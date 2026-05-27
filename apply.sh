@@ -11,7 +11,7 @@ CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 
 # --- 1. Locate the installed claude-hud plugin cache ----------------------
 PLUGIN_DIR=$(
-  ls -d "$CLAUDE_DIR"/plugins/cache/*/claude-hud/*/ 2>/dev/null \
+  ls -d "$CLAUDE_DIR"/plugins/cache/claude-hud/claude-hud/*/ 2>/dev/null \
     | awk -F/ '{ print $(NF-1) "\t" $0 }' \
     | grep -E '^[0-9]+\.[0-9]+\.[0-9]+[[:space:]]' \
     | sort -t. -k1,1n -k2,2n -k3,3n -k4,4n \
