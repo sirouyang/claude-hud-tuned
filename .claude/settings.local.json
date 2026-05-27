@@ -3,7 +3,8 @@
     "allow": [
       "Bash(bash *)",
       "Bash(command -v node)",
-      "Bash(where node *)"
+      "Bash(where node *)",
+      "mcp__codegraph__codegraph_context"
     ]
   }
 }
