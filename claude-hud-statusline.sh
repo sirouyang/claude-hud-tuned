@@ -22,20 +22,27 @@ if [ -z "$PLUGIN_DIR" ] || [ ! -f "$PLUGIN_DIR/dist/index.js" ]; then
   exit 0
 fi
 
-# Find node: try PATH first, then common locations
-NODE_BIN=$(command -v node 2>/dev/null)
-if [ -z "$NODE_BIN" ]; then
-  for candidate in /d/nodejs/node /usr/local/bin/node /usr/bin/node "$HOME/.nvm/versions/node/"*/bin/node; do
-    if [ -x "$candidate" ]; then
-      NODE_BIN="$candidate"
-      break
-    fi
-  done
+# Detect runtime: prefer bun on macOS/Linux, node on Windows
+RUNTIME=""
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+  # Windows: node only
+  RUNTIME=$(command -v node 2>/dev/null)
+else
+  # macOS/Linux: prefer bun, fall back to node
+  RUNTIME=$(command -v bun 2>/dev/null || command -v node 2>/dev/null)
 fi
 
-if [ -z "$NODE_BIN" ]; then
-  echo "ERROR: node not found. Install Node.js 18+ and ensure it is on PATH." >&2
+if [ -z "$RUNTIME" ]; then
+  echo "ERROR: Neither bun nor node found. Install Node.js 18+ or Bun." >&2
   exit 1
 fi
 
-exec "$NODE_BIN" "$PLUGIN_DIR/dist/index.js"
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+  exec "$RUNTIME" "$PLUGIN_DIR/dist/index.js"
+else
+  if [[ "$(basename "$RUNTIME")" == "bun" ]]; then
+    exec "$RUNTIME" --env-file /dev/null "$PLUGIN_DIR/dist/index.js"
+  else
+    exec "$RUNTIME" "$PLUGIN_DIR/dist/index.js"
+  fi
+fi
