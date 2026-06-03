@@ -104,6 +104,9 @@ export function warning(text, colors) {
 export function critical(text, colors) {
     return colorize(text, resolveAnsi(colors?.critical, RED));
 }
+export function effort(text, colors) {
+    return withOverride(text, colors?.effort, BRIGHT_YELLOW);
+}
 export function getContextColor(percent, colors, thresholds) {
     const critical = thresholds?.critical ?? 85;
     const warning = thresholds?.warning ?? 70;

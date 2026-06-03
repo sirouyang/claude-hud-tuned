@@ -131,6 +131,10 @@ export function critical(text: string, colors?: Partial<HudColorOverrides>): str
   return colorize(text, resolveAnsi(colors?.critical, RED));
 }
 
+export function effort(text: string, colors?: Partial<HudColorOverrides>): string {
+  return withOverride(text, colors?.effort, BRIGHT_YELLOW);
+}
+
 export interface ContextThresholds {
   warning?: number;
   critical?: number;

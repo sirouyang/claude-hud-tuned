@@ -49,6 +49,7 @@ export interface HudColorOverrides {
   label: HudColorValue;
   custom: HudColorValue;
   barFilled: string;
+  effort: HudColorValue;
   barEmpty: string;
 }
 
@@ -210,6 +211,7 @@ export const DEFAULT_CONFIG: HudConfig = {
     label: 'dim',
     custom: 208,
     barFilled: '█',
+    effort: 'brightYellow',
     barEmpty: '░',
   },
 };
