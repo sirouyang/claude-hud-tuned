@@ -34,7 +34,7 @@
     "showTodos": false,
     "showSessionName": false,
     "showClaudeCodeVersion": false,
-    "showEffortLevel": false,
+    "showEffortLevel": true,
     "showMemoryUsage": false,
     "showPromptCache": false,
     "promptCacheTtlSeconds": 300,
@@ -71,6 +71,7 @@
     "label": "dim",
     "custom": 208,
     "barFilled": "█",
+    "effort": "brightYellow",
     "barEmpty": "░"
   }
 }

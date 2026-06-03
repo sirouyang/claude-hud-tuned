@@ -4,7 +4,7 @@ import * as os from 'node:os';
 import { pathToFileURL } from 'node:url';
 import { getModelName, formatModelName, getProviderLabel } from '../../stdin.js';
 import { getOutputSpeed } from '../../speed-tracker.js';
-import { git as gitColor, gitBranch as gitBranchColor, warning as warningColor, critical as criticalColor, label, model as modelColor, project as projectColor, red, green, yellow, dim, custom as customColor, brightGreen } from '../colors.js';
+import { git as gitColor, gitBranch as gitBranchColor, warning as warningColor, critical as criticalColor, label, model as modelColor, project as projectColor, effort as effortColor, red, green, yellow, dim, custom as customColor, brightGreen } from '../colors.js';
 import { t } from '../../i18n/index.js';
 import { renderCostEstimate } from './cost.js';
 import { normalizeAddedDirs, sanitize as sanitizeDisplayText, basenameOf, truncateBasename, MAX_RENDERED_ADDED_DIRS } from './added-dirs.js';
@@ -156,14 +156,14 @@ export function renderProjectLine(ctx) {
         const model = formatModelName(getModelName(ctx.stdin), ctx.config?.display?.modelFormat, ctx.config?.display?.modelOverride);
         const providerLabel = getProviderLabel(ctx.stdin);
         const modelQualifier = providerLabel ?? undefined;
-        let modelDisplay = modelQualifier ? `${model} | ${modelQualifier}` : model;
-        if (ctx.effortLevel && ctx.effortSymbol) {
-            modelDisplay += ` ${ctx.effortSymbol} ${ctx.effortLevel}`;
+        const modelDisplay = modelQualifier ? `${model} | ${modelQualifier}` : model;
+        const modelBadge = modelColor(`[${modelDisplay}]`, colors);
+        if (ctx.effortLevel) {
+            parts.push(`${modelBadge} ${effortColor(ctx.effortLevel, colors)}`);
         }
-        else if (ctx.effortLevel) {
-            modelDisplay += ` ${ctx.effortLevel}`;
+        else {
+            parts.push(modelBadge);
         }
-        parts.push(modelColor(`[${modelDisplay}]`, colors));
     }
     if (display?.showDuration !== false && ctx.sessionDuration) {
         parts.push(label(ctx.sessionDuration, colors));
