@@ -108,7 +108,7 @@ export function formatSessionDuration(sessionStart, now = () => Date.now()) {
     const ms = now() - sessionStart.getTime();
     const totalSec = Math.floor(ms / 1000);
     if (totalSec < 60)
-        return "<1m";
+        return `${totalSec}s`;
     const hours = Math.floor(totalSec / 3600);
     const mins = Math.floor((totalSec % 3600) / 60);
     const secs = totalSec % 60;

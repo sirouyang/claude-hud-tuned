@@ -6,7 +6,13 @@
       "Bash(where node *)",
       "mcp__codegraph__codegraph_context",
       "Bash(npm run *)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "mcp__codegraph__codegraph_files",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(python3 -c \"import tomllib; tomllib.load\\(open\\('/Users/kratos/.codex/config.toml','rb'\\)\\); print\\('TOML syntax OK'\\)\")",
+      "Bash(python3 -c \"import toml; toml.load\\('/Users/kratos/.codex/config.toml'\\); print\\('TOML syntax OK'\\)\")",
+      "Read(//Users/kratos/.claude/plugins/claude-hud/**)"
     ]
   }
 }

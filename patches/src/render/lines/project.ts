@@ -70,15 +70,9 @@ export function renderProjectLine(ctx: RenderContext): string | null {
 
   let projectPart: string | null = null;
   if (display?.showProject !== false && ctx.stdin.cwd) {
-    const homeDir = os.homedir();
-    let displayPath = ctx.stdin.cwd;
-    if (displayPath.startsWith(homeDir)) {
-      displayPath = '~' + displayPath.slice(homeDir.length);
-    }
-    const segments = displayPath.split(/[/\\]/).filter(Boolean);
-    const pathLevels = ctx.config?.pathLevels ?? 1;
-    const projectPath = sanitizeDisplayText(segments.length > 0 ? segments.slice(-pathLevels).join('/') : '/');
-    const coloredProject = projectColor(projectPath, colors);
+    const segments = ctx.stdin.cwd.split(/[/\\]/).filter(Boolean);
+    const folderName = sanitizeDisplayText(segments.length > 0 ? segments[segments.length - 1] : '/');
+    const coloredProject = projectColor(folderName, colors);
     projectPart = safeHyperlink(getFileHref(ctx.stdin.cwd), coloredProject);
   }
 

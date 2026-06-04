@@ -1,5 +1,5 @@
 import { getContextPercent, getBufferedPercent, getTotalTokens, } from "../../stdin.js";
-import { coloredBar, label, getContextColor, RESET, brightGreen, brightCyan, yellow, magenta, brightYellow } from "../colors.js";
+import { coloredBar, label, getContextColor, RESET, brightGreen, brightCyan, yellow, magenta, brightYellow, effort as effortColor } from "../colors.js";
 import { getAdaptiveBarWidth } from "../../utils/terminal.js";
 import { t } from "../../i18n/index.js";
 import { progressLabel } from "./label-align.js";
