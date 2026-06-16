@@ -68,27 +68,43 @@ mkdir -p "$PLUGIN_CONFIG_DIR"
 cp "$SCRIPT_DIR/plugin-config.json" "$PLUGIN_CONFIG_DIR/config.json"
 echo "Installed plugin config: $PLUGIN_CONFIG_DIR/config.json"
 
-# --- 5. Update settings.local.json statusLine --------------------------------
-# Use settings.local.json (not settings.json) so the statusLine survives
-# Claude Code startup, which overwrites settings.json with its own schema.
-SETTINGS="$CLAUDE_DIR/settings.local.json"
-if [ ! -f "$SETTINGS" ]; then
-  echo "{}" > "$SETTINGS"
-fi
+# --- 5. Update settings.json statusLine ------------------------------------
+# Write statusLine to settings.json (Claude Code reads this directly).
+# settings.local.json is NOT reliably merged for statusLine in v2.x.
+SETTINGS_JSON="$CLAUDE_DIR/settings.json"
+SETTINGS_LOCAL="$CLAUDE_DIR/settings.local.json"
 
 if command -v node >/dev/null 2>&1; then
-  cp "$SETTINGS" "$SETTINGS.bak-$(date +%Y%m%d-%H%M%S)"
+  # Update settings.json (primary — Claude Code reads this)
+  if [ -f "$SETTINGS_JSON" ]; then
+    cp "$SETTINGS_JSON" "$SETTINGS_JSON.bak-$(date +%Y%m%d-%H%M%S)"
+  else
+    echo "{}" > "$SETTINGS_JSON"
+  fi
   node -e "
 const fs = require('fs');
 const data = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
 data.statusLine = { type: 'command', command: process.argv[2] };
 fs.writeFileSync(process.argv[1], JSON.stringify(data, null, 2));
 console.log('Updated', process.argv[1], 'statusLine');
-" "$SETTINGS" "bash $WRAPPER_DST"
+" "$SETTINGS_JSON" "bash $WRAPPER_DST"
+
+  # Also update settings.local.json as a fallback reference
+  if [ ! -f "$SETTINGS_LOCAL" ]; then
+    echo "{}" > "$SETTINGS_LOCAL"
+  fi
+  cp "$SETTINGS_LOCAL" "$SETTINGS_LOCAL.bak-$(date +%Y%m%d-%H%M%S)"
+  node -e "
+const fs = require('fs');
+const data = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
+data.statusLine = { type: 'command', command: process.argv[2] };
+fs.writeFileSync(process.argv[1], JSON.stringify(data, null, 2));
+console.log('Updated', process.argv[1], 'statusLine');
+" "$SETTINGS_LOCAL" "bash $WRAPPER_DST"
 else
   echo
-  echo "WARNING: node not found — settings.local.json was not modified."
-  echo "Add this block manually:"
+  echo "WARNING: node not found — settings were not modified."
+  echo "Add this block to $SETTINGS_JSON:"
   echo
   echo '  "statusLine": {'
   echo '    "type": "command",'
