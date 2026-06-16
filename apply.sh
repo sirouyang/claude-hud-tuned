@@ -68,23 +68,26 @@ mkdir -p "$PLUGIN_CONFIG_DIR"
 cp "$SCRIPT_DIR/plugin-config.json" "$PLUGIN_CONFIG_DIR/config.json"
 echo "Installed plugin config: $PLUGIN_CONFIG_DIR/config.json"
 
-# --- 5. Update settings.json statusLine -----------------------------------
-SETTINGS="$CLAUDE_DIR/settings.json"
+# --- 5. Update settings.local.json statusLine --------------------------------
+# Use settings.local.json (not settings.json) so the statusLine survives
+# Claude Code startup, which overwrites settings.json with its own schema.
+SETTINGS="$CLAUDE_DIR/settings.local.json"
 if [ ! -f "$SETTINGS" ]; then
   echo "{}" > "$SETTINGS"
 fi
 
-if command -v jq >/dev/null 2>&1; then
+if command -v node >/dev/null 2>&1; then
   cp "$SETTINGS" "$SETTINGS.bak-$(date +%Y%m%d-%H%M%S)"
-  tmp=$(mktemp)
-  jq --arg cmd "bash $WRAPPER_DST" \
-    '.statusLine = {type: "command", command: $cmd}' \
-    "$SETTINGS" > "$tmp"
-  mv "$tmp" "$SETTINGS"
-  echo "Updated $SETTINGS statusLine"
+  node -e "
+const fs = require('fs');
+const data = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
+data.statusLine = { type: 'command', command: process.argv[2] };
+fs.writeFileSync(process.argv[1], JSON.stringify(data, null, 2));
+console.log('Updated', process.argv[1], 'statusLine');
+" "$SETTINGS" "bash $WRAPPER_DST"
 else
   echo
-  echo "WARNING: jq not installed — settings.json was not modified."
+  echo "WARNING: node not found — settings.local.json was not modified."
   echo "Add this block manually:"
   echo
   echo '  "statusLine": {'
@@ -96,8 +99,11 @@ fi
 # --- 6. Smoke test --------------------------------------------------------
 echo
 echo "Smoke test (expect 2 colored lines, OS info + Context):"
+set +e
 echo '{"model":{"display_name":"Opus 4.7"},"context_window":{"current_usage":{"input_tokens":45000},"context_window_size":200000},"transcript_path":"/tmp/test.jsonl","cwd":"'"$PWD"'"}' \
-  | bash "$WRAPPER_DST" || echo "(smoke test failed)"
+  | bash "$WRAPPER_DST"
+if [ $? -eq 0 ]; then echo "OK"; else echo "(smoke test failed — non-fatal)"; fi
+set -eo pipefail
 
 echo
 echo "Done. Restart Claude Code to pick up the new statusline."

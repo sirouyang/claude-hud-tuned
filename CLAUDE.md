@@ -18,7 +18,7 @@ plugin-config.json    # Config reference
 ```bash
 bash apply.sh
 ```
-Idempotent. Requires `jq` for JSON editing.
+Idempotent. Uses Node.js for JSON editing (no extra dependencies).
 
 ### Edit plugin code
 1. Edit `patches/src/` or `patches/dist/`
@@ -29,3 +29,4 @@ Idempotent. Requires `jq` for JSON editing.
 - Plugin cache: `~/.claude/plugins/cache/claude-hud/*/`
 - Config: `~/.claude/plugins/claude-hud/config.json`
 - Wrapper: `~/.claude/claude-hud-statusline.sh`
+- StatusLine config: `~/.claude/settings.local.json` (NOT `settings.json` — that gets overwritten on startup)
